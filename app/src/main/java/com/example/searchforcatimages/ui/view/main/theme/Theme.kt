@@ -1,4 +1,4 @@
-package com.example.searchforcatimages.ui.theme
+package com.example.searchforcatimages.ui.view.main.theme
 
 import android.app.Activity
 import android.os.Build

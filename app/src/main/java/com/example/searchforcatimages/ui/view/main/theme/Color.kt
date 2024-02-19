@@ -1,4 +1,4 @@
-package com.example.searchforcatimages.ui.theme
+package com.example.searchforcatimages.ui.view.main.theme
 
 import androidx.compose.ui.graphics.Color
 

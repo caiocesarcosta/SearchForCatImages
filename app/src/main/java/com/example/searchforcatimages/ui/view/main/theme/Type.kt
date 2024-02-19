@@ -1,4 +1,4 @@
-package com.example.searchforcatimages.ui.theme
+package com.example.searchforcatimages.ui.view.main.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
