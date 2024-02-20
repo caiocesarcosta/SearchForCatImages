@@ -17,23 +17,11 @@ class ImgurRepository {
         apiService = retrofit.create(ImgurApiService::class.java)
     }
 
-    suspend fun searchCatImages(authHeader: String, s: String): List<CatImageModel>? {
-        val clientId = "1ceddedc03a5d71"
-        val authHeader = "Client-ID $clientId"
-        val response = apiService.searchCatImages(authHeader, "cats").data
+    suspend fun searchCatImages(authHeader: String, s: String): List<CatImageModel> {
+        val authHeader = authHeader
+        val response = apiService.searchCatImages(authHeader, s)
 
-        return response.map { item ->
-            CatImageModel(
-                id = item.id,
-                title = item.title,
-                description = item.description,
-                name = item.name,
-                link = item.link
-            )
-        }
+        return response.data
+
     }
 }
-
-
-
-
