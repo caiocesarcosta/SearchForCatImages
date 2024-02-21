@@ -5,17 +5,8 @@ data class CatImageModel(
     val title: String?,
     val description: String?,
     val name: String?,
-    val link: String?
-) {
-    fun toCatImage() {
-        // Atualiza o objeto existente
-        title?.trim()
-        description?.trim()
-        name?.trim()
-        link?.trim()
-    }
-}
-
+    val link: String
+)
 
 
 

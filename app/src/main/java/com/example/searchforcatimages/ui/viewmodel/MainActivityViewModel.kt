@@ -5,6 +5,8 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.searchforcatimages.data.model.CatImageModel
+import com.example.searchforcatimages.data.model.CatImageResponse
 import com.example.searchforcatimages.data.remote.ImgurRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -43,14 +45,23 @@ class MainActivityViewModel : ViewModel() {
                 val clientId = "1ceddedc03a5d71"
                 val authHeader = "Client-ID $clientId"
                 val response = ImgurRepository().searchCatImages(authHeader, "cats")
-                val catImages = response
-                return@withContext ResultState.Success(response)
-            } catch (e: IOException){
-                return@withContext ResultState.Error(e, "Erro de conexão ao buscar as imagens de gato. Verifique sua conexão com a internet e tente novamente.")
-            } catch (e: Exception){
-                return@withContext ResultState.Error(e, "Ocorreu um erro ao buscar as imagens de gato.")
+
+                return@withContext ResultState.Success(response.data)
+
+            } catch (e: IOException) {
+                return@withContext ResultState.Error(
+                    e,
+                    "Erro de conexão ao buscar as imagens de gato. Verifique sua conexão com a internet e tente novamente."
+                )
+            } catch (e: Exception) {
+                return@withContext ResultState.Error(
+                    e,
+                    "Ocorreu um erro ao buscar as imagens de gato."
+                )
             }
         }
     }
+
+
 }
 

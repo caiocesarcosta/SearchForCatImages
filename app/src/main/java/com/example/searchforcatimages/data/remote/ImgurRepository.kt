@@ -1,6 +1,7 @@
 package com.example.searchforcatimages.data.remote
 
 import com.example.searchforcatimages.data.model.CatImageModel
+import com.example.searchforcatimages.data.model.CatImageResponse
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -17,11 +18,11 @@ class ImgurRepository {
         apiService = retrofit.create(ImgurApiService::class.java)
     }
 
-    suspend fun searchCatImages(authHeader: String, s: String): List<CatImageModel> {
+    suspend fun searchCatImages(authHeader: String, s: String): CatImageResponse {
         val authHeader = authHeader
         val response = apiService.searchCatImages(authHeader, s)
 
-        return response.data
+        return response
 
     }
 }

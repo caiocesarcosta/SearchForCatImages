@@ -1,34 +1,79 @@
 package com.example.searchforcatimages.ui.adapter
 
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.example.searchforcatimages.R
+import com.example.searchforcatimages.data.model.CatImageModel
+import com.example.searchforcatimages.data.model.CatImageResponse
 
 
-class ImageAdapter {
-    class ImageAdapter(private val context: Context, private val images: List<String>) : RecyclerView.Adapter<ImageAdapter.ViewHolder>() {
+class ImageAdapter(private val context: Context, val list: List<CatImageModel>) : RecyclerView.Adapter<ImageAdapter.ViewHolder>() {
 
-        inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-            val imageView: ImageView = itemView.findViewById(R.id.image_view)
-        }
+        private val items = ArrayList<String>()
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-            val view = LayoutInflater.from(context).inflate(R.layout.image_item, parent, false)
-            return ViewHolder(view)
+            return ViewHolder(android.R.layout.simple_list_item_1, parent)
         }
 
         override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-            val imageUrl = images[position]
-            Glide.with(context)
-                .load(imageUrl)
-                .into(holder.imageView)
+            holder.bind(items[position])
         }
 
-        override fun getItemCount(): Int = images.size
+        override fun getItemCount(): Int = items.size
+
+        fun submitList(imagens: List<CatImageModel>) {
+            items.clear()
+            items.addAll(extractUrlsFromString(imagens))
+            notifyDataSetChanged()
+        }
+
+        private  fun extractUrlsFromString(input: List<Any?>): List<String> {
+            val regex = "(?i)\\b((?:https?://|www\\d{0,3}[.]|[a-z0-9.\\-]+[.][a-z]{2,4}/)(?:[^\\s()<>]+|\\(([^\\s()<>]+|(\\([^\\s()<>]+\\)))*\\))+(?:\\(([^\\s()<>]+|(\\([^\\s()<>]+\\)))*\\)|[^\\s`!()\\[\\]{};:'\".,<>?«»“”‘’]))".toRegex()
+
+
+            val teste = regex.findAll(input.toString()).map { it.value
+
+            }.toList()
+
+            teste.forEach {
+                println(it)
+            }
+
+            return teste
+        }
+
+        fun getLinkFromRetrofitResult(resp: CatImageResponse): List<CatImageModel> {
+
+            val catImages = mutableListOf<CatImageModel>()
+            resp.data.forEach { it ->
+                catImages.add(it)
+            }
+
+            return catImages
+        }
+
+
+        inner class ViewHolder(layoutRes: Int, parent: ViewGroup) : RecyclerView.ViewHolder(
+            LayoutInflater.from(context).inflate(layoutRes, parent, false)
+        ) {
+
+            private val textView = itemView.findViewById<View>(android.R.id.text1) as TextView
+
+            fun bind(url: String) {
+                textView.setOnClickListener { openBrowser(url) }
+                textView.text = url
+            }
+        }
+
+        private fun openBrowser(url: String) {
+            val intent = Intent(Intent.ACTION_VIEW, Uri.parse(url)).apply { flags = Intent.FLAG_ACTIVITY_NEW_TASK }
+            context.startActivity(intent)
+        }
     }
-}
+
+

@@ -1,7 +1,8 @@
 package com.example.searchforcatimages.data.model
+import com.google.gson.annotations.SerializedName
 
 data class CatImageResponse(
-    val data: List<CatImageModel>,
+    @SerializedName("data") val data: List<CatImageModel>,
     val success: Boolean,
     val status: Int
 )
