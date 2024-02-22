@@ -1,6 +1,7 @@
 package com.example.searchforcatimages.ui.view.main
 
 
+import ImageAdapter
 import ResultState
 import android.os.Bundle
 import android.util.Log
@@ -8,21 +9,34 @@ import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
+import com.example.searchforcatimages.data.model.CatImageModel
 import com.example.searchforcatimages.databinding.ActivityMainBinding
-import com.example.searchforcatimages.ui.adapter.ImageAdapter
 import com.example.searchforcatimages.ui.viewmodel.MainActivityViewModel
+import com.example.searchforcatimages.util.CustomAppGlideModule
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
     private val mainViewModel: MainActivityViewModel by viewModels()
 
-//    private val adapter =
+//    private val adapter = ImageAdapter(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+//        Glide.initialize(this) {
+//            it.disableDiskCache()
+//            it.enableLogging()
+//            it.preloaderPoolSize(5)
+//            it.setDefaultRequestOptions {
+//                 //placeholder(R.drawable.placeholder)
+//                  //error(R.drawable.error)
+//            }
+//            it.setInitializer(CustomAppGlideModule())
+//        }
 
         mainViewModel.loadImgsFromApi()
 
@@ -31,19 +45,19 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupUI() {
-//        binding.progressBar.isVisible = false
+//      binding.progressBar.isVisible = false
+        binding.recyclerView.layoutManager = LinearLayoutManager(this)
+//      binding.recyclerView.adapter = ImageAdapter(this)
 
     }
-
     private fun observeResults() {
         mainViewModel.imgurRepositories.observe(this@MainActivity, Observer { state ->
             when (state) {
                 is ResultState.Success -> {
 //                    binding.progressBar.isVisible = false
 
-                    binding.recyclerView.layoutManager = LinearLayoutManager(this)
-                    binding.recyclerView.adapter = ImageAdapter(this, state.catImages)
-
+                    binding.recyclerView.adapter =
+                        ImageAdapter(this, getListLink(state.catImages))
                 }
                 is ResultState.Error -> {
                     Log.e("MainActivity", "Erro")
@@ -59,19 +73,10 @@ class MainActivity : AppCompatActivity() {
             }
         })
     }
-
-    private  fun extractUrlsFromString(input: List<Any?>): List<String> {
-        val regex = "(?i)\\b((?:https?://|www\\d{0,3}[.]|[a-z0-9.\\-]+[.][a-z]{2,4}/)(?:[^\\s()<>]+|\\(([^\\s()<>]+|(\\([^\\s()<>]+\\)))*\\))+(?:\\(([^\\s()<>]+|(\\([^\\s()<>]+\\)))*\\)|[^\\s`!()\\[\\]{};:'\".,<>?«»“”‘’]))".toRegex()
-
-
-        val teste = regex.findAll(input.toString()).map { it.value
-
-        }.toList()
-
-        teste.forEach {
-            println(it)
-        }
-
-        return teste
+    private fun getListLink(catImages: List<CatImageModel>): List<String> {
+        return catImages.map {
+            println(it.link)
+            it.link
+        }.filter { it.endsWith(".jpg") }
     }
 }

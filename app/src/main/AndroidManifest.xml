@@ -16,6 +16,26 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.SearchForCatImages"
         tools:targetApi="31">
+
+        <meta-data
+            android:name="com.github.bumptech.glide.REGISTERS_VERSION"
+            android:value="1" />
+        <meta-data
+            android:name="com.github.bumptech.glide.integration.okhttp3.OkHttpUrlLoader.Factory"
+            android:value="com.your.package.OkHttpUrlLoaderFactory" />
+        <meta-data
+            android:name="com.github.bumptech.glide.integration.recyclerview.RTL_LAYOUT_DIRECTION"
+            android:value="rtl" />
+        <meta-data
+            android:name="com.github.bumptech.glide.integration.recyclerview.UseRegisterForActivityResults"
+            android:value="true" />
+        <service android:name=".util.CustomAppGlideModule" android:exported="false">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </service>
+
         <activity
             android:theme="@style/AppTheme"
             android:name=".ui.view.main.MainActivity"

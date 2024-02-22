@@ -5,8 +5,6 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.searchforcatimages.data.model.CatImageModel
-import com.example.searchforcatimages.data.model.CatImageResponse
 import com.example.searchforcatimages.data.remote.ImgurRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
